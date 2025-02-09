@@ -1,0 +1,61 @@
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.*;
+import javax.swing.border.Border;
+
+public class Main {
+    private static String playerx = "x";
+    private static  String playero ="o";
+    private static char player='x';
+    private static JButton [] [] buttons = new JButton[3][3];
+    private static void createAndShowGUI() {
+        JFrame jFrame = new JFrame("Tic Tac Toe Game");
+        jFrame.setLayout(new GridLayout(3,3));
+        jFrame.setSize(300,300);
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        for (int row=0;row<3;row++)
+            {
+                for(int col=0;col<3;col++)
+                    {
+                     JButton button = new JButton(); 
+                     button.setFont(new Font("Arial",Font.BOLD,40));
+                     button.setBackground(Color.decode("#5D6D7E"));
+                     button.setForeground(Color.CYAN);
+                     button.addActionListener(new ButtonClickListener(row,col,buttons));
+                    jFrame.add(button);
+                    buttons [row][col] = button;
+                    }
+            }
+        jFrame.setVisible(true);
+    }
+    public static class ButtonClickListener implements ActionListener
+        {
+            private int col;
+            private int row;
+            private JButton [][] buttons;
+            public ButtonClickListener(int row, int col,JButton [][] buttons)
+            {
+                this.row=row;
+                this.col=col;
+                this.buttons=buttons;
+                
+            }
+            public void actionPerformed(ActionEvent e)
+            {
+            JButton button = (JButton) e.getSource();
+            if(button.getText().isEmpty())
+             {
+            button.setText(Character.toString(player));
+            button.setBackground(player == 'x' ? Color.decode("#4ECDC4"): Color.PINK);
+            if(checkWinner(player))
+            {
+              String WinnerName=(player =='x') ? playerx : playero; JOptionPane.showMessageDialog(null, WinnerName +" wins!"); 
+                resetBoard();
+            }
+                else if(isBoardFull())
+                    {
+     JOptionPane.showMessageDialog(null," It's a draw!"); 
+                    resetBoard();
